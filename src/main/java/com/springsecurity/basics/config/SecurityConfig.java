@@ -22,19 +22,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		// We can create any number of users that we want using withUser
+		// We have configured default schema in schema.sql
+		// We have 2 tables here: users table having username,password and enabled and authorities table having username(fk which references username in users table) and authroity) 
+		// Remember to give ROLE_ prefix to authority in authorities table like ROLE_USER
+		// We have also populated some data in data.sql
 		auth.jdbcAuthentication()
-		.dataSource(dataSource)
-		.withDefaultSchema()
-		.withUser(
-				User.withUsername("user")
-				.password("pass")
-				.roles("USER")
-				)
-		.withUser(
-				User.withUsername("root")
-				.password("root")
-				.roles("ADMIN")
-				);
+		.dataSource(dataSource);
 	}
 
 	@Override
