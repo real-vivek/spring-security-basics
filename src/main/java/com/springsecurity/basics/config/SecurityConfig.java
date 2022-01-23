@@ -21,13 +21,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// We can create any number of users that we want using withUser
-		// We have configured default schema in schema.sql
-		// We have 2 tables here: users table having username,password and enabled and authorities table having username(fk which references username in users table) and authroity) 
-		// Remember to give ROLE_ prefix to authority in authorities table like ROLE_USER
+		// We have configured different schema in schema.sql
+		// We have 2 tables here: my_users table having uname,pass and enabled and my_authorities table having uname(fk which references uname in my_users table) and authroity) 
 		// We have also populated some data in data.sql
+		// We need tell spring security to look at our schema instead of default schema
+		// We do this using usersByUsernameQuery and authoritiesByUsernameQuery
+		// Here we have overriden table name as weel as column names
 		auth.jdbcAuthentication()
-		.dataSource(dataSource);
+			.dataSource(dataSource)
+			.usersByUsernameQuery("select uname,pass,enabled from my_users where uname = ?")
+			.authoritiesByUsernameQuery("select uname,authority from my_authorities where uname = ?");
 	}
 
 	@Override
