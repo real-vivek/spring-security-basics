@@ -8,14 +8,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	// Spring will autowire h2 database we have to only give spring-boot-starter-jdbc and h2 database dependency
+	// Now instead of default h2 datasource, mysql datasource will be populated here as we have configured properties for it in application.properties
 	@Autowired
 	DataSource dataSource;
 
@@ -26,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// We have also populated some data in data.sql
 		// We need tell spring security to look at our schema instead of default schema
 		// We do this using usersByUsernameQuery and authoritiesByUsernameQuery
-		// Here we have overriden table name as weel as column names
+		// Here we have overriden table name as well as column names
 		auth.jdbcAuthentication()
 			.dataSource(dataSource)
 			.usersByUsernameQuery("select uname,pass,enabled from my_users where uname = ?")
